@@ -16,7 +16,15 @@ console.log('AUTH0_DOMAIN:', process.env.AUTH0_DOMAIN);
 console.log('AUTH0_AUDIENCE:', process.env.AUTH0_AUDIENCE);
 
 const app = express();
-app.use(cors());
+
+// Configure CORS
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Auth0 JWT middleware
@@ -24,6 +32,17 @@ const jwtCheck = auth({
   audience: process.env.AUTH0_AUDIENCE,
   issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}/`,
   tokenSigningAlg: 'RS256'
+});
+
+// Debug middleware to log requests
+app.use((req: Request, res: Response, next) => {
+  console.log('Incoming request:', {
+    method: req.method,
+    path: req.path,
+    headers: req.headers,
+    body: req.body
+  });
+  next();
 });
 
 // Connect to MongoDB
@@ -41,6 +60,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Example protected route
 app.get('/api/protected', jwtCheck, (req: Request, res: Response) => {
+  console.log('Protected route accessed:', req.auth);
   res.json({ message: 'You are authenticated!', user: req.auth });
 });
 
@@ -52,7 +72,10 @@ app.get('/api/public', (req: Request, res: Response) => {
 app.use('/api/v1', indexRoutes);
 
 app.post('/auth/verify-token', jwtCheck, (req: Request & { auth?: any }, res) => {
-  console.log('Full auth data:', req.auth);  // This will show all available fields
+  console.log('Token verification request:', {
+    auth: req.auth,
+    headers: req.headers
+  });
   const userData = {
     sub: req.auth?.sub,
     email: req.auth?.email,
