@@ -1,7 +1,6 @@
 import express, { Request, Response, Router, RequestHandler } from 'express';
 import User, { IUser } from '../models/User';
 import { AuthResult } from 'express-oauth2-jwt-bearer';
-import ProtectedRoute from '@/components/ProtectedRoute';
 
 const router: Router = express.Router();
 

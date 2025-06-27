@@ -8,7 +8,7 @@ router.post('/sync', async (req, res) => {
         // Auth0 user info is in req.auth
         const { sub, email, name } = req.auth;
 
-        // Find or create user in MongoDB
+        // Find or create user in MongoDB 
         let user = await User.findOne({ auth0Id: sub });
         if (!user) {
             user = new User({ auth0Id: sub, email, name });
