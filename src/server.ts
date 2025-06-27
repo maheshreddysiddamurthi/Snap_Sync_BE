@@ -19,7 +19,7 @@ const app = express();
 
 // Configure CORS
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://mysnapsync.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -82,7 +82,7 @@ app.post('/auth/verify-token', jwtCheck, (req: Request & { auth?: any }, res) =>
     name: req.auth?.name,
     picture: req.auth?.picture
   };
-  res.json({ 
+  res.json({
     message: 'Token verified successfully',
     user: userData
   });
