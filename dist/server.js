@@ -20,7 +20,7 @@ console.log('AUTH0_AUDIENCE:', process.env.AUTH0_AUDIENCE);
 const app = (0, express_1.default)();
 // Configure CORS
 app.use((0, cors_1.default)({
-    origin: ['http://localhost:3000', 'https://mysnapsync.vercel.app'],
+    origin: '*',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
