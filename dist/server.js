@@ -20,10 +20,10 @@ console.log('AUTH0_AUDIENCE:', process.env.AUTH0_AUDIENCE);
 const app = (0, express_1.default)();
 // Configure CORS
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://mysnapsync.vercel.app'],
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
 }));
 app.use(express_1.default.json());
 // Auth0 JWT middleware
@@ -50,9 +50,9 @@ if (!process.env.MONGO_URI) {
 mongoose_1.default.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
-});
+        console.error('MongoDB connection error:', err);
+        process.exit(1);
+    });
 // Example protected route
 app.get('/api/protected', jwtCheck, (req, res) => {
     console.log('Protected route accessed:', req.auth);
