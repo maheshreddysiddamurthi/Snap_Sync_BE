@@ -10,6 +10,7 @@ export interface IUser extends Document {
   emailVerified: boolean;
   lastUpdated: Date;
   createdAt: Date;
+  mobileNumber?: string; // Added mobileNumber field
 }
 
 const userSchema = new Schema<IUser>({
@@ -21,7 +22,8 @@ const userSchema = new Schema<IUser>({
   picture: { type: String },
   emailVerified: { type: Boolean, default: false },
   lastUpdated: { type: Date, default: Date.now },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  mobileNumber: { type: String } // Added mobileNumber to schema
 });
 
 export default mongoose.model<IUser>('User', userSchema); 

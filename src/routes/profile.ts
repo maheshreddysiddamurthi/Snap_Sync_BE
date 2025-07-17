@@ -88,7 +88,8 @@ const syncHandler: RequestHandler = async (req, res) => {
         lastName: user.lastName,
         picture: user.picture,
         emailVerified: user.emailVerified,
-        lastUpdated: user.lastUpdated
+        lastUpdated: user.lastUpdated,
+        mobileNumber: user.mobileNumber
       }
     });
   } catch (err: any) {
@@ -102,5 +103,38 @@ const syncHandler: RequestHandler = async (req, res) => {
 };
 
 router.post('/sync', syncHandler);
+
+router.post('/mobile', async (req: Request, res: Response) => {
+  try {
+    const authReq = req as AuthRequest;
+    const mobileNumber = req.body.mobileNumber;
+    const auth0Id = authReq.auth?.payload?.sub;
+    if (!auth0Id || !mobileNumber) {
+      return res.status(400).json({ error: 'auth0Id (from token) and mobileNumber are required' });
+    }
+    if (!/^\d{10}$/.test(mobileNumber)) {
+      return res.status(400).json({ error: 'Invalid mobile number. Must be 10 digits.' });
+    }
+    const user = await User.findOneAndUpdate(
+      { auth0Id },
+      { mobileNumber },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json({
+      message: 'Mobile number updated successfully',
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        mobileNumber: user.mobileNumber
+      }
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err instanceof Error ? err.message : 'An error occurred' });
+  }
+});
 
 export default router; 

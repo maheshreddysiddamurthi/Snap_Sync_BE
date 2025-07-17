@@ -43,6 +43,7 @@ const userSchema = new mongoose_1.Schema({
     picture: { type: String },
     emailVerified: { type: Boolean, default: false },
     lastUpdated: { type: Date, default: Date.now },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    mobileNumber: { type: String } // Added mobileNumber to schema
 });
 exports.default = mongoose_1.default.model('User', userSchema);
