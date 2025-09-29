@@ -37,4 +37,16 @@ app.get('/api/public', (req, res) => {
 app.use('/api/profile', jwtCheck, profileRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+let User = {
+    name: "mahesh",
+    gender: "male",
+    occupation: "developer"
+}
+let namex = User.name;
+let genderx = User.gender;
+let occupationx = User.occupation; 
+
+let {name, gender} = User; // des
+// tructuring assignment
