@@ -5,6 +5,7 @@ import cors from 'cors';
 import { auth } from 'express-oauth2-jwt-bearer';
 import profileRoutes from './routes/profile';
 import indexRoutes from './routes/index';
+import folderRoutes from './routes/folder';
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
@@ -89,6 +90,7 @@ app.post('/auth/verify-token', jwtCheck, (req: Request & { auth?: any }, res) =>
 });
 
 app.use('/api/profile', jwtCheck, profileRoutes);
+app.use('/api', jwtCheck, folderRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
